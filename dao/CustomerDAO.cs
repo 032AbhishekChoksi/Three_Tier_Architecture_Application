@@ -34,9 +34,11 @@ namespace Three_Tier_Architecture_Application.dao
             try
             {
                 SqlConnection con = GetConnection();
-                SqlCommand cmd = new SqlCommand("SP_Insert_Customer");
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Connection = con;
+                SqlCommand cmd = new SqlCommand("SP_Insert_Customer")
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    Connection = con
+                };
                 cmd.Parameters.AddWithValue("@name", customer.GetName());
                 cmd.Parameters.AddWithValue("@emailid", customer.GetEmailid());
                 con.Open();

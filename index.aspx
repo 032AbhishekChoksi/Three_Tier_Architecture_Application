@@ -21,6 +21,10 @@
         <div>
             <asp:Button ID="bttnSubmit" runat="server" Text="Add" OnClick="BttnSubmit_Click" />            
         </div>
+        <br />
+        <div>
+            <asp:Label ID="lblMessage" runat="server" Text="" Visible="false"></asp:Label>&emsp;
+        </div>
     </form>
 </body>
 </html>

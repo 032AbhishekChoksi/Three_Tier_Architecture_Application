@@ -27,6 +27,8 @@ namespace Three_Tier_Architecture_Application
             string EmailID = txtEmailID.Text;
             Customer customer = new Customer(Name, EmailID);
             customerDAO.InsertCustomer(customer);
+            lblMessage.Visible = true;
+            lblMessage.Text = "Inserted Successfully";
         }
     }
 }
