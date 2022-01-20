@@ -7,6 +7,7 @@
     <title>Customer Managment System</title>
 </head>
 <body>
+    <a href="display.aspx">Display</a>
     <form id="form1" runat="server">
         <div>
             <asp:Label ID="lblName" runat="server" Text="Name"></asp:Label>&emsp;
