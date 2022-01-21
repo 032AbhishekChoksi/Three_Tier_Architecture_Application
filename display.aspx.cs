@@ -18,8 +18,39 @@ namespace Three_Tier_Architecture_Application
         }
         protected void Page_Load(object sender, EventArgs e)
         {
-            r1.DataSource = customerDAO.DisplayCustomer();
-            r1.DataBind();
+            //ObjectDataSource objectData = new ObjectDataSource();
+            //objectData.DataObjectTypeName = "Three_Tier_Architecture_Application.dao.CustomerDAO";
+            //objectData.SelectMethod = "DisplayCustomer";
+            //r1.DataSource = objectData.DataObjectTypeName;
+            //objectData.DataBind();
+            //r1.DataBind();
+            BindRecordsRepeater();
         }
-    }
+        private void BindRecordsRepeater()
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                ds = customerDAO.DisplayCustomer();
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    r1.DataSource = ds;
+                    r1.DataBind();
+                }
+                else
+                {
+                    r1.DataSource = null;
+                    r1.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+                Response.Write("Oops! error occured :" + ex.Message.ToString());
+            }
+            finally
+            {
+                customerDAO = null;
+            }
+        }
+    }    
 }

@@ -7,9 +7,9 @@ namespace Three_Tier_Architecture_Application.model
 {
     public class Customer
     {
-        protected int id;
-        protected string name;
-        protected string emailid;
+        private int id;
+        private string name;
+        private string emailid;
 
         public Customer()
         {

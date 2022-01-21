@@ -20,10 +20,12 @@
                 <tbody>
         </HeaderTemplate>
         <ItemTemplate>
-            <tr>
+            
+            <tr>               
                 <td><%# Eval("id") %></td>
                 <td><%# Eval("name") %></td>
                 <td><%# Eval("emailid") %></td>
+                <td><a href='index.aspx?id=<%# Eval("id") %>'>Edit</a></td>
             </tr>
         </ItemTemplate>
         <FooterTemplate>

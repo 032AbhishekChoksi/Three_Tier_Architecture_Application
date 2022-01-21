@@ -16,24 +16,26 @@ namespace Three_Tier_Architecture_Application.dao
         public CustomerDAO()
         {
         }
-        protected SqlConnection GetConnection()
+        private SqlConnection GetConnection()
         {
             SqlConnection connection = null;
             try
             {
                 connection = new SqlConnection(maincon);
             }
-            catch(SqlException e)
+            catch (SqlException e)
             {
                 Console.WriteLine(e.Message);
             }
             return connection;
         }
-        public void InsertCustomer(Customer customer)
+        public Int32 InsertCustomer(Customer customer)
         {
+            SqlConnection con = GetConnection();
+            int result;
             try
             {
-                SqlConnection con = GetConnection();
+              
                 SqlCommand cmd = new SqlCommand("SP_Insert_Customer")
                 {
                     CommandType = CommandType.StoredProcedure,
@@ -41,65 +43,57 @@ namespace Three_Tier_Architecture_Application.dao
                 };
                 cmd.Parameters.AddWithValue("@name", customer.GetName());
                 cmd.Parameters.AddWithValue("@emailid", customer.GetEmailid());
-                con.Open();
-                cmd.ExecuteNonQuery();
-                con.Close();
+                if (con.State == ConnectionState.Closed)
+                {
+                    con.Open();
+                }
+                result = cmd.ExecuteNonQuery();
+                cmd.Dispose();
+                if (result > 0)
+                {
+                    return result;
+                }
+                else
+                {
+                    return 0;
+                }
             }
-            catch (SqlException e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
+                throw;
+            }
+            finally
+            {
+                if (con.State != ConnectionState.Closed)
+                {
+                    con.Close();
+                }
             }
         }
-        public List<Customer> DisplayCustomer()
+        public DataSet DisplayCustomer()
         {
-            List<Customer> listCustomer = new List<Customer>();
+            DataSet ds = new DataSet();
             try
             {
-
                 SqlConnection con = GetConnection();
                 SqlCommand cmd = new SqlCommand("SP_Display_Customer")
                 {
                     CommandType = CommandType.StoredProcedure,
                     Connection = con
                 };
-                con.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    int id = Convert.ToInt32(reader["id"]);
-                    string name = reader["name"].ToString();
-                    string email = reader["emailid"].ToString();
-                    listCustomer.Add(new Customer(id, name, email));
-                }
-                con.Close();
+                SqlDataAdapter adp = new SqlDataAdapter(cmd);
+                adp.Fill(ds);
+                cmd.Dispose();
             }
-            catch (SqlException e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
+                throw;
             }
-            return listCustomer;
+            finally
+            {
+                ds.Dispose();
+            }
+            return ds;
         }
-        //public DataTable DisplayCustomer()
-        //{
-        //    DataTable dt = null;
-        //    try
-        //    {
-        //        SqlDataAdapter adp = new SqlDataAdapter();
-        //        SqlConnection con = GetConnection();
-        //        SqlCommand cmd = new SqlCommand("SP_Display_Customer")
-        //        {
-        //            CommandType = CommandType.StoredProcedure,
-        //            Connection = con
-        //        };
-        //        adp = new SqlDataAdapter(cmd);
-        //        dt = new DataTable();
-        //        adp.Fill(dt);
-        //    }
-        //    catch (SqlException e)
-        //    {
-        //        Console.WriteLine(e.Message);
-        //    }
-        //    return dt;
-        //}
     }
 }
