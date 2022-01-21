@@ -95,5 +95,126 @@ namespace Three_Tier_Architecture_Application.dao
             }
             return ds;
         }
+        public Int32 DeleteCustomer(Customer customer)
+        {
+            SqlConnection con = GetConnection();
+            int result;
+            try
+            {
+
+                SqlCommand cmd = new SqlCommand("SP_Delete_Customer")
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    Connection = con
+                };
+                cmd.Parameters.AddWithValue("@id", customer.GetId());
+                if (con.State == ConnectionState.Closed)
+                {
+                    con.Open();
+                }
+                result = cmd.ExecuteNonQuery();
+                cmd.Dispose();
+                if (result > 0)
+                {
+                    return result;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                if (con.State != ConnectionState.Closed)
+                {
+                    con.Close();
+                }
+            }
+        }
+        public Int32 UpdateCustomer(Customer customer)
+        {
+            SqlConnection con = GetConnection();
+            int result;
+            try
+            {
+
+                SqlCommand cmd = new SqlCommand("SP_Update_Customer")
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    Connection = con
+                };
+                cmd.Parameters.AddWithValue("@id",customer.GetId());
+                cmd.Parameters.AddWithValue("@name", customer.GetName());
+                cmd.Parameters.AddWithValue("@emailid", customer.GetEmailid());
+                if (con.State == ConnectionState.Closed)
+                {
+                    con.Open();
+                }
+                result = cmd.ExecuteNonQuery();
+                cmd.Dispose();
+                if (result > 0)
+                {
+                    return result;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                if (con.State != ConnectionState.Closed)
+                {
+                    con.Close();
+                }
+            }
+        }
+        public Customer DisplayCustomerByID(int p_id)
+        {
+            SqlConnection con = GetConnection();
+            Customer customer = new Customer();
+            try
+            {
+                SqlCommand cmd = new SqlCommand("SP_Display_CustomerByID")
+                {
+                    CommandType = CommandType.StoredProcedure,
+                    Connection = con
+                };
+                cmd.Parameters.AddWithValue("@id", p_id);
+                if (con.State == ConnectionState.Closed)
+                {
+                    con.Open();
+                }
+                SqlDataReader dr = cmd.ExecuteReader();
+                cmd.Dispose();
+                while (dr.Read())
+                {
+                    int id = Convert.ToInt32(dr["id"]);
+                    string name = dr["name"].ToString();
+                    string emailid = dr["emailid"].ToString();
+                    customer = new Customer(id,name,emailid);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                if (con.State != ConnectionState.Closed)
+                {
+                    con.Close();
+                }
+            }
+            return customer;
+        }
     }
 }

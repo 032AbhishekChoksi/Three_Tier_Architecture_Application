@@ -7,6 +7,7 @@
     <title>Display Customer</title>
 </head>
 <body>
+    <a href="index.aspx">Add Record</a><br/>
     <asp:Repeater ID="r1" runat="server">
         <HeaderTemplate>
             <table collspan="10">
@@ -25,7 +26,9 @@
                 <td><%# Eval("id") %></td>
                 <td><%# Eval("name") %></td>
                 <td><%# Eval("emailid") %></td>
-                <td><a href='index.aspx?id=<%# Eval("id") %>'>Edit</a></td>
+                <td><a href='index.aspx?id=<%# Eval("id") %>&type=update'>Edit</a>&emsp;
+                    <a href='display.aspx?id=<%# Eval("id") %>&type=delete'>Delete</a>
+                </td>
             </tr>
         </ItemTemplate>
         <FooterTemplate>
